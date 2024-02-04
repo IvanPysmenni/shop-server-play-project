@@ -1,0 +1,4 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.22 FATAL_ERROR)
+
+add_subdirectory(src)
+
