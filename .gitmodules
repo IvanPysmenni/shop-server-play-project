@@ -1,3 +1,6 @@
 [submodule "vendor/Crow"]
 	path = vendor/Crow
 	url = git@github.com:CrowCpp/Crow.git
+[submodule "vendor/asio"]
+	path = vendor/asio
+	url = git@github.com:chriskohlhoff/asio.git
