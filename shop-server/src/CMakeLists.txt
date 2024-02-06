@@ -1,10 +1,3 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.22 FATAL_ERROR)
 
-project(shop-server)
-
-add_executable(${PROJECT_NAME} main.cpp)
-
-set_target_properties( ${PROJECT_NAME}
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-)
+target_sources(${PROJECT_NAME} PRIVATE main.cpp shop-server.cpp)

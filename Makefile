@@ -1,10 +1,25 @@
 .PHONY: build-shop build-client build-manager clean-shop clean-client clean-manager install clean all
 
-build-shop:
-	cd shop-server && \
+copy-asio:
+	mkdir -p shop-server/build/asio
+	cp -R vendor/asio/asio/include shop-server/build/asio/include
+
+build-vendor: copy-asio
+	cd vendor/Crow && \
 	mkdir -p build && \
 	cd build && \
-	cmake .. && \
+	cmake .. 	-DCROW_BUILD_EXAMPLES=OFF \
+				-DCROW_BUILD_TESTS=OFF \
+				-DASIO_INCLUDE_DIR=../../../shop-server/build/asio/include \
+				-DCMAKE_INSTALL_PREFIX=../../../shop-server/build/Crow \
+	&& \
+	make install
+
+build-shop: build-vendor
+	mkdir -p shop-server/build && \
+	cd shop-server && \
+	cd build && \
+	cmake .. -DASIO_INCLUDE_DIR=asio/include && \
 	make 
 
 build-client:
