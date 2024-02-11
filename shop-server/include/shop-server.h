@@ -2,22 +2,21 @@
 #define SHOP_SERVER_H
 
 #include <mutex>
+#include <map>
+#include <string>
+
+#include <product-category.h>
 
 class ShopServer
 {
 public:
-    void TakeOneApple();
-    void TakeOneOrange();
-    void TakeOneSausage();
-    void TakeOneChocolate();
-    void TakeOneBeer();
+    ShopServer();
+
+    bool RemoveOneItem(const ProductCategory& itemType);
+    std::string GetAvailableProductList();
 
 private:
-    int m_apple = 100;
-    int m_orange = 100;
-    int m_sausage = 100;
-    int m_chocolate = 100;
-    int m_beer = 100;
+    std::map<ProductCategory, int> m_productList;
 
     std::mutex m_mt;
 };

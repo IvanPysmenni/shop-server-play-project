@@ -1,17 +1,56 @@
 #include <iostream>
+#include <string>
 
-#include "crow.h"
+#include <crow.h>
+#include <shop-server.h>
+#include <product-category.h>
 
 int main()
 {
+    ShopServer server;
+
     crow::SimpleApp app;
 
-    CROW_ROUTE(app, "/")
-    ([]() {
-        return "Hello, world!";
-    });
+    CROW_ROUTE(app, "/list")
+    (
+        [&server]() 
+        {
+            return server.GetAvailableProductList();
+        }
+    );
 
-    app.port(18080).run();
+    CROW_ROUTE(app, "/buy").methods(crow::HTTPMethod::PUT)
+    (
+        [&server](const crow::request& req) 
+        {
+            ProductCategory cat = StringToProductCategory(req.url_params.get("item_name"));
+
+            std::string responseStr;
+            if(cat == ProductCategory::INVALID)
+            {
+                responseStr = "There is no item with name ";
+                responseStr = req.url_params.get("item_name");
+                return responseStr;
+            }
+
+            if(server.RemoveOneItem(cat))
+            {
+                responseStr = "Here is one ";
+                responseStr = req.url_params.get("item_name");
+                return responseStr;
+            }
+            else
+            {
+                responseStr = "Item ";
+                responseStr = req.url_params.get("item_name");
+                responseStr = " is out of stock";
+
+                return responseStr;
+            }
+        }
+    );
+
+    app.port(18080).multithreaded().run();
 
     return 0;
 }
