@@ -1,5 +1,5 @@
-#ifndef SHOP_SERVER_H
-#define SHOP_SERVER_H
+#ifndef SHOP_SERVER_H 
+#define SHOP_SERVER_H 
 
 #include <mutex>
 #include <map>
@@ -13,6 +13,7 @@ public:
     ShopServer();
 
     bool RemoveOneItem(const ProductCategory& itemType);
+    std::string GetProductList();
     std::string GetAvailableProductList();
 
 private:

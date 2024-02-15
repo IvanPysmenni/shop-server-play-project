@@ -4,7 +4,11 @@ copy-asio:
 	mkdir -p shop-server/build/asio
 	cp -R vendor/asio/asio/include shop-server/build/asio/include
 
-build-vendor: copy-asio
+copy-nlohmann:
+	mkdir -p shop-server/build/nlohmann
+	cp -R vendor/nlohmann/single_include/nlohmann shop-server/build/nlohmann/
+
+build-vendor: copy-asio copy-nlohmann
 	cd vendor/Crow && \
 	mkdir -p build && \
 	cd build && \

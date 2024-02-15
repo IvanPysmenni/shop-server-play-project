@@ -1,5 +1,5 @@
-#ifndef SHOP_SERVER_UTILITY_H
-#define SHOP_SERVER_UTILITY_H
+#ifndef SHOP_SERVER_UTILITY_H 
+#define SHOP_SERVER_UTILITY_H 
 
 #include <string>
 

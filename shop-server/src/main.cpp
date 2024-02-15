@@ -11,7 +11,15 @@ int main()
 
     crow::SimpleApp app;
 
-    CROW_ROUTE(app, "/list")
+    CROW_ROUTE (app, "/list")
+    (
+        [&server]() 
+        {
+            return server.GetProductList();
+        }
+    );
+
+    CROW_ROUTE (app, "/list/details")
     (
         [&server]() 
         {
@@ -19,7 +27,7 @@ int main()
         }
     );
 
-    CROW_ROUTE(app, "/buy").methods(crow::HTTPMethod::PUT)
+    CROW_ROUTE (app, "/buy").methods(crow::HTTPMethod::PUT)
     (
         [&server](const crow::request& req) 
         {
@@ -51,6 +59,7 @@ int main()
     );
 
     app.port(18080).multithreaded().run();
+
 
     return 0;
 }

@@ -10,7 +10,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMA
 include(${CMAKE_SOURCE_DIR}/build/Crow/lib/cmake/Crow/CrowConfig.cmake)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Crow::Crow)
-target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/include ${CMAKE_SOURCE_DIR}/build/nlohmann)
 
 add_subdirectory(src)
 
