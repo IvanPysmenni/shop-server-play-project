@@ -27,7 +27,7 @@ int main()
         }
     );
 
-    CROW_ROUTE (app, "/buy").methods(crow::HTTPMethod::PUT)
+    CROW_ROUTE (app, "/buy").methods(crow::HTTPMethod::POST)
     (
         [&server](const crow::request& req) 
         {

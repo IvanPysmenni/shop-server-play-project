@@ -1,22 +1,84 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"fmt"
+	"io"
+	"math/rand"
+	"net/http"
+	"net/url"
+	"time"
 )
+
+func GetListOfProducts(serverUrl string) (list []string, err error) {
+	var ret []string
+
+	resp, err := http.Get(serverUrl + "/list")
+	if err != nil {
+		return nil, err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	err = json.Unmarshal(body, &ret)
+	if err != nil {
+		return nil, err
+	}
+
+	return ret, nil
+}
+
+func BuyOneProduct(serverUrl string, productName string) (err error) {
+	resp, err := http.PostForm(serverUrl+"/buy", url.Values{"item_name": {productName}})
+	if err != nil {
+		return err
+	}
+
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return err
+	}
+
+	fmt.Print(body)
+	return nil
+}
+
+func BuyProducts(serverUrl string) {
+	for {
+		productList, err := GetListOfProducts(serverUrl)
+		if err == nil {
+			if len(productList) > 0 {
+				product := productList[rand.Intn(len(productList))]
+				BuyOneProduct(serverUrl, product)
+			} else {
+				fmt.Print("No products left\n")
+				break
+			}
+		} else {
+			fmt.Printf("Fail to get information about available products: %s\n", err.Error())
+		}
+
+		time.Sleep(5 * time.Second)
+	}
+}
 
 func main() {
 	shopAddress := flag.String("h", "127.0.0.1", "Shop ip address")
 	shopPort := flag.Int("p", 8080, "Shop port")
-	appName := flag.String("-n", "undefined-client", "Client name")
+	appName := flag.String("n", "undefined-client", "Client name")
 
-	fmt.Printf("My name is %s. I will go to shop by this address %s:%d", *appName, *shopAddress, shopPort)
+	flag.Parse()
 
+	fmt.Printf("My name is %s. I will go to shop by this address %s:%d\n", *appName, *shopAddress, *shopPort)
+
+	serverUrl := fmt.Sprintf("http://%s:%d", *shopAddress, *shopPort)
+	BuyProducts(serverUrl)
 }
-
-// 1. Read parameters with information about server(shop)
-// 2. Output information about this client
-// 3. Make a request to server for get information about available products
-// 4. Buy one random product
-// 5. Sleep for several seconds(random from 1 to 5)
-// 6. Repeat steps 3,4,5 till no products are available
