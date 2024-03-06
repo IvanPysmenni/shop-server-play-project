@@ -31,6 +31,11 @@ int main()
     (
         [&server](const crow::request& req) 
         {
+            std::cout << "Key size" << req.url_params.keys().size() << std::endl;
+            for(auto key : req.url_params.keys())
+            {
+                std::cout << key << std::endl;
+            }
             ProductCategory cat = StringToProductCategory(req.url_params.get("item_name"));
 
             std::string responseStr;

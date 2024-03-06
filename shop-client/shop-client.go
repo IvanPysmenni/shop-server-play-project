@@ -7,7 +7,6 @@ import (
 	"io"
 	"math/rand"
 	"net/http"
-	"net/url"
 	"time"
 )
 
@@ -35,7 +34,17 @@ func GetListOfProducts(serverUrl string) (list []string, err error) {
 }
 
 func BuyOneProduct(serverUrl string, productName string) (err error) {
-	resp, err := http.PostForm(serverUrl+"/buy", url.Values{"item_name": {productName}})
+	client := &http.Client{}
+	req, err := http.NewRequest("POST", serverUrl+"/buy", nil)
+	if err != nil {
+		return err
+	}
+
+	q := req.URL.Query()
+	q.Add("item_name", productName)
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return err
 	}
@@ -47,7 +56,7 @@ func BuyOneProduct(serverUrl string, productName string) (err error) {
 		return err
 	}
 
-	fmt.Print(body)
+	fmt.Printf("I bought %s\n", string(body))
 	return nil
 }
 
