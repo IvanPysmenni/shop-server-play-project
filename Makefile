@@ -1,4 +1,4 @@
-.PHONY: build-shop build-client build-manager clean-shop clean-client clean-manager install clean all
+.PHONY: build-shop build-client build-manager clean-shop clean-client clean-manager install clean all docker
 
 copy-asio:
 	mkdir -p shop-server/build/asio
@@ -45,6 +45,9 @@ clean-client:
 clean-manager:
 	rm -rf shop-manager/build
 
+clean-vendor:
+	rm -rf vendor/Crow/build
+
 install:
 	mkdir -p apps
 	[ -f "shop-manager/build/shop-manager" ] && cp -u shop-manager/build/shop-manager apps/shop-manager
@@ -55,3 +58,8 @@ clean: clean-shop clean-client clean-manager
 	rm -rf apps
 
 all: build-shop build-client build-manager install
+
+docker: 
+	docker build --rm -t shop-server-play-project/server:latest -f docker/server.Dockerfile .
+	docker build --rm -t shop-server-play-project/manager:latest -f docker/manager.Dockerfile .
+	docker build --rm -t shop-server-play-project/client:latest -f docker/client.Dockerfile .

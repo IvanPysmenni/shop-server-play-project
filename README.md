@@ -1,6 +1,29 @@
-Shop as web server to which clients come every several seconds and buy one random item. And manager who watching how many items is there
-Shop have limit amount of items. For exame 10 apples, 15 bananes, 25 carrots
-When item is out of stock customers should stop trying to buy it.
-When all items sold manager must close shop and clients also should be stop because shop is closed
+This is just a play project created just to test some frameworks. Idea is to simulate grocery shop with one manager how looking for shop state and several clients that buying some amount of products
 
+## Build
 
+```
+make all
+make install
+```
+
+## Docker build
+```
+make docker
+```
+
+## Run
+### Shop
+```
+./apps/shop-server
+```
+
+### Manager
+```
+./apps/shop-manager -h 127.0.0.1 -p 18080
+```
+
+### Client
+```
+./apps/shop-client -h 127.0.0.1 -p 18080 -n Clara
+```
